@@ -1,7 +1,7 @@
 import pygame
 
 path = "images\\bullet.png"
-TILE = 8
+TILE = 10
 
 
 class Bullet:
@@ -24,10 +24,10 @@ class Bullet:
             bullets.remove(self)
         else:
             for obj in objects:
-                # print(type(obj))
                 if (obj != self.parent
                         and obj.rect.colliderect(self.rect)):
-                    obj.damage(self.damage, objects)
+                    if self.parent.__class__.__name__ != obj.__class__.__name__:
+                        obj.damage(self.damage, objects)
                     bullets.remove(self)
                     break
 

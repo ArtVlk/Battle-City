@@ -54,6 +54,7 @@ class Tank:
         for obj in objects:
             if obj != self and self.rect.colliderect(obj.rect):
                 self.rect.topleft = old_x, old_y
+                break
 
         if keys[self.keySHOT] and self.shotTimer == 0:
             dx = DIRECTS[self.direct][0] * self.bulletSpeed
