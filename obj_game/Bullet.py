@@ -15,7 +15,7 @@ class Bullet:
         self.damage = damage
         self.bullet_image = pygame.image.load(path)
 
-    def update(self, objects, bullets, width, height):
+    def update(self, objects, bonuses, bullets, width, height):
         self.px += self.dx
         self.py += self.dy
         self.rect.topleft = (self.px, self.py)
@@ -23,6 +23,10 @@ class Bullet:
         if self.px < 0 or self.px > width or self.py < 0 or self.py > height:
             bullets.remove(self)
         else:
+            for bonus in bonuses:
+                if bonus.rect.colliderect(self.rect):
+                    bonuses.remove(bonus)
+                    bullets.remove(self)
             for obj in objects:
                 if (obj != self.parent
                         and obj.rect.colliderect(self.rect)):

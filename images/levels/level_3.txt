@@ -22,6 +22,6 @@ BB.......BBBB..........SSSSSSSSSS
 SS....S.............BB...........
 SS...SSS............BB......LLLLL
 ....LLLLL................LLLLLLLL
-.....LLL....BBBB....BB.......WWWW
-......K.....BE1E2B....BB......WWWWW
+.....LLL...BBBB....BB.......WWWWW
+......K....BE1E2B....BB......WWWWWW
 ...........BE3E4B....BB......WWWWWW
