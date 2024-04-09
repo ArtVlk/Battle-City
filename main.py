@@ -5,14 +5,14 @@ import sys
 
 from random import randint
 
-from obj_game.Til import Til
+from obj_game.til import Til
 from obj_game.tank import Tank
 from obj_game.level import Level
 from obj_game.enemy_tank import EnemyTank
-from obj_game.Eagle import Eagle
-from obj_game.Bonus import Bonus
+from obj_game.eagle import Eagle
+from obj_game.bonus import Bonus
 
-sys.path.insert(0, 'C:/Battle_City')
+sys.path.insert(0, 'C:/Battle-City_git')
 
 
 pygame.init()
@@ -22,32 +22,32 @@ FPS = 60
 # '1': 5 - обычного танка 5 раз
 LEVEL = {
     0: {
-        '1': 0,
-        '2': 0,
-        '3': 1,
+        '1': 5,
+        '2': 1,
+        '3': 0,
         '4': 0,
         '5': 0
     },
     1: {
-        '1': 0,
-        '2': 0,
+        '1': 4,
+        '2': 2,
         '3': 1,
         '4': 0,
         '5': 0
     },
     2: {
-        '1': 0,
+        '1': 5,
         '2': 0,
-        '3': 1,
-        '4': 0,
-        '5': 0
+        '3': 2,
+        '4': 1,
+        '5': 1
     },
     3: {
         '1': 0,
-        '2': 0,
-        '3': 5,
-        '4': 0,
-        '5': 0
+        '2': 2,
+        '3': 3,
+        '4': 2,
+        '5': 3
     }
 }
 number_level = 3
@@ -64,9 +64,10 @@ available_coordinates = []
 
 
 # Путь к изображению танка игрока
-tank_image_path = 'C:/Battle_City/images/tank_player.png'
+tank_image_path = 'images\\tank_player.png'
 
-level = Level(objects, available_coordinates, objects_durable_tiles, number_level)
+level = Level(objects, available_coordinates,
+              objects_durable_tiles, number_level)
 tank = Tank(0, 380, 0,
             (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE),
             tank_image_path, objects)
@@ -93,9 +94,10 @@ while play:
     else:
         tank.moveSpeed = 1
         tank.bulletDamage = 1
-        bonus_number = [1, 2, 3, 4, 1, 2, 3, 1, 2, 4]
+        bonus_number = [1, 2, 3, 4, 1, 2, 4, 1, 2, 4]
         bonus_random = random.choice(bonus_number)
-        Bonus(randint(50, WIDTH - 50), randint(50, HEIGHT - 50), bonuses, bonus_random)
+        Bonus(randint(50, WIDTH - 50), randint(50, HEIGHT - 50),
+              bonuses, bonus_random)
         bonusTimer = randint(600, 1000)
 
     for bullet in bullets:
@@ -107,17 +109,22 @@ while play:
             obj.update(keys, bullets, objects, bonuses, WIDTH, HEIGHT)
             if not obj and obj.tank_player_live > 0:
                 tank = Tank(0, 380, 0,
-                            (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE),
+                            (pygame.K_a, pygame.K_d,
+                             pygame.K_w, pygame.K_s, pygame.K_SPACE),
                             tank_image_path, objects)
                 objects.append(tank)
         elif isinstance(obj, EnemyTank):
-            obj.update(bullets, objects, general_time)
+            obj.update(bullets, objects, bonuses, general_time)
 
     while count < LEVEL[number_level][current_tank_type] and count != -1:
         if time == 0:
-            objects.append(EnemyTank(available_coordinates, objects, bullets, WIDTH, HEIGHT, current_tank_type))
+            objects.append(EnemyTank(available_coordinates,
+                                     objects, bullets,
+                                     WIDTH, HEIGHT, current_tank_type))
             count += 1
-            time = 600  # устанавливаем интервал времени для следующего создания объекта
+            # устанавливаем интервал времени для следующего создания объекта
+            time = 600
+
         break
 
     if count >= LEVEL[number_level][current_tank_type]:
@@ -127,10 +134,12 @@ while play:
         else:
             count = -1
 
-    alive_tanks = sum(1 for obj in objects if isinstance(obj, Tank) and obj.tank_player_live != 0)
+    alive_tanks = sum(1 for obj in objects if isinstance(obj, Tank)
+                      and obj.tank_player_live != 0)
     eagle_count = sum(1 for obj in objects if isinstance(obj, Eagle))
     enemy_tank_count = sum(1 for obj in objects if isinstance(obj, EnemyTank))
-    if alive_tanks == 0 or eagle_count <= 3 or (enemy_tank_count == 0 and count == -1):
+    if (alive_tanks == 0 or eagle_count <= 3
+            or (enemy_tank_count == 0 and count == -1)):
         print('GAME OVER')
         break
 

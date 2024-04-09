@@ -1,7 +1,9 @@
 import pygame
 
-from obj_game.Bullet import Bullet
-from obj_game.Bonus import Bonus
+from queue import Queue
+
+from obj_game.bullet import Bullet
+from obj_game.bonus import Bonus
 
 
 DIRECTS = [[0, -1], [1, 0], [0, 1], [-1, 0]]
@@ -24,6 +26,8 @@ class Tank:
         self.bulletSpeed = 5
         self.bulletDamage = 1
 
+        self.numberBonus = Queue()
+
         self.keyLEFT = key_list[0]
         self.keyRIGHT = key_list[1]
         self.keyUP = key_list[2]
@@ -34,8 +38,8 @@ class Tank:
         self.tank_rotated = self.tank_image
 
     def update(self, keys, bullets, objects, bonuses, width, height):
-        print(self.tank_player_live, self.bulletDamage, self.moveSpeed)
         old_x, old_y = self.rect.topleft
+
         if keys[self.keyLEFT] and self.rect.left > 0:
             self.rect.x -= self.moveSpeed
             self.tank_rotated = pygame.transform.rotate(self.tank_image, 90)
@@ -61,6 +65,7 @@ class Tank:
         for bonus in bonuses:
             if isinstance(bonus, Bonus) and self.rect.colliderect(bonus.rect):
                 bonus.update(objects, bonuses)
+                self.numberBonus.put([bonus.bonus_number, 600])
 
         if keys[self.keySHOT] and self.shotTimer == 0:
             dx = DIRECTS[self.direct][0] * self.bulletSpeed
@@ -71,6 +76,20 @@ class Tank:
 
         if self.shotTimer > 0:
             self.shotTimer -= 1
+
+        new_number_bonus = Queue()
+        while not self.numberBonus.empty():
+            bonus_info = self.numberBonus.get()
+            time = bonus_info[1] - 1
+            if time > 0:
+                new_number_bonus.put([bonus_info[0], time])
+            else:
+                if bonus_info[0] == 1:
+                    self.moveSpeed -= 0.3
+                elif bonus_info[0] == 4:
+                    self.bulletDamage -= 1
+
+        self.numberBonus = new_number_bonus
 
     def damage(self, value, objects):
         self.health -= value

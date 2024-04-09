@@ -1,5 +1,5 @@
-from obj_game.Til import Til
-from obj_game.Eagle import Eagle
+from obj_game.til import Til
+from obj_game.eagle import Eagle
 
 BLOCK_SIZE = 16
 TILES = ['B', 'S', 'L', 'K', 'W']
