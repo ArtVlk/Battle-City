@@ -345,7 +345,6 @@ class EnemyTank:
         self.health -= value
         if self.health <= 0:
             objects.remove(self)
-            print('bot dead')
 
     def draw(self, window):
         window.blit(self.tank_rotated, self.rect.topleft)
