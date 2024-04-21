@@ -29,12 +29,15 @@ class Menu:
     def draw(self, surface, x, y, button_margins):
         for i, option in enumerate(self.option_surfaces):
             option_rect = option.get_rect()
-            option_rect.topleft = (x, y + i * button_margins)
+            option_rect.topleft = (x, y + i * button_margins - 50)
 
             if i == self.current_option_index:
                 pygame.draw.rect(surface, (0, 100, 0), option_rect)
 
             surface.blit(option, option_rect)
+
+    def quit_game(self):
+        pygame.quit()
 
     def level_select_window(self, window):
         run_level_select = True
@@ -48,6 +51,7 @@ class Menu:
             self.append_option('Уровень 2', flag=0)
             self.append_option('Уровень 3', flag=0)
             self.append_option('Уровень 4', flag=0)
+            self.append_option('Меню', flag=0)
 
             self.draw(window, 100, 100, 75)
 
@@ -65,4 +69,6 @@ class Menu:
                         self.switch_option(1)
                         number_level = min(len(self.option_surfaces), number_level + 1)
                     elif event.key == pygame.K_RETURN:
+                        if number_level == 4:
+                            number_level = -1
                         return number_level, play

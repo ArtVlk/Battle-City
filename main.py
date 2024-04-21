@@ -80,35 +80,47 @@ current_tank_type = '1'
 menu = Menu()
 menu.append_option('Начать играть', flag=0)
 menu.append_option('Выбор уровня', lambda: menu.switch_option(1))
-menu.append_option('Выход', quit)
+menu.append_option('Выход')
 run_level_select = False
 run_play = False
 
 play = True
 while play:
+    window.fill('black')
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             play = False
         elif event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_UP:
                 menu.switch_option(-1)
             elif event.key == pygame.K_DOWN:
                 menu.switch_option(1)
             elif event.key == pygame.K_RETURN:
+
                 if menu.current_option_index == 1:
                     number_level, play = menu.level_select_window(window)
-                    run_level_select = True
-                    level = Level(objects, available_coordinates,
-                                  objects_durable_tiles, number_level)
-                elif menu.current_option_index != 0:
-                    menu.choosing_option()
+                    if number_level != -1:
+                        run_level_select = True
+                        level = Level(objects, available_coordinates,
+                                      objects_durable_tiles, number_level)
+                        run_play = True
+                    else:
+                        menu = Menu()
+                        menu.append_option('Начать играть', flag=0)
+                        menu.append_option('Выбор уровня', lambda: menu.switch_option(1))
+                        menu.append_option('Выход')
+                        run_level_select = False
+                        run_play = False
+                        number_level = 0
+
+                elif menu.current_option_index == 2:
+                    play = False
+
                 elif menu.current_option_index == 0:
                     level = Level(objects, available_coordinates,
                                   objects_durable_tiles, number_level)
-                run_play = True
-
-    window.fill('black')
-
+                    run_play = True
     if not run_play:
         menu.draw(window, 100, 100, 75)
 
