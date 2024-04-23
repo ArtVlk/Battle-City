@@ -20,10 +20,13 @@ TILE_TO_PATH = {
 
 
 class Level:
-    def __init__(self, object, available_coordinates, objects_durable_tiles, number):
-        self.initialize_level(object, available_coordinates, objects_durable_tiles, number)
+    def __init__(self, object, available_coordinates,
+                 objects_durable_tiles, number):
+        self.initialize_level(object, available_coordinates,
+                              objects_durable_tiles, number)
 
-    def initialize_level(self, object, available_coordinates, objects_durable_tiles, number):
+    def initialize_level(self, object, available_coordinates,
+                         objects_durable_tiles, number):
         path = 'images/levels/level_' + str(number) + '.txt'
         with open(path, 'r') as file:
             data = file.read().split('\n')

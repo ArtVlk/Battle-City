@@ -40,7 +40,8 @@ class Bonus:
             elif self.bonus_number == 2:
                 tank_hit.tank_player_live += 1
             elif self.bonus_number == 3:
-                enemy_tanks = [obj for obj in objects if obj.type == 'enemy_tank']
+                enemy_tanks = [obj for obj in objects
+                               if obj.type == 'enemy_tank']
                 for enemy_tank in enemy_tanks:
                     objects.remove(enemy_tank)
             elif self.bonus_number == 4:

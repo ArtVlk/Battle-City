@@ -79,7 +79,8 @@ current_tank_type = '1'
 # выбирать стрелочками вверх и вниз
 menu = Menu()
 menu.append_option('Начать играть', flag=0)
-menu.append_option('Выбор уровня', lambda: menu.switch_option(1))
+menu.append_option('Выбор уровня',
+                   lambda: menu.switch_option(1))
 menu.append_option('Выход')
 run_level_select = False
 run_play = False
@@ -108,7 +109,8 @@ while play:
                     else:
                         menu = Menu()
                         menu.append_option('Начать играть', flag=0)
-                        menu.append_option('Выбор уровня', lambda: menu.switch_option(1))
+                        menu.append_option('Выбор уровня',
+                                           lambda: menu.switch_option(1))
                         menu.append_option('Выход')
                         run_level_select = False
                         run_play = False
@@ -146,7 +148,8 @@ while play:
             bonus.update(objects, bonuses)
         for obj in objects:
             if isinstance(obj, Tank):
-                obj.update(keys, bullets, objects, bonuses, WIDTH, HEIGHT)
+                obj.update(keys, bullets, objects,
+                           bonuses, WIDTH, HEIGHT)
                 if not obj and obj.tank_player_live > 0:
                     tank = Tank(0, 380, 0,
                                 (pygame.K_a, pygame.K_d,
@@ -156,13 +159,14 @@ while play:
             elif isinstance(obj, EnemyTank):
                 obj.update(bullets, objects, bonuses, general_time)
 
-        while count < LEVEL[number_level][current_tank_type] and count != -1:
+        while (count < LEVEL[number_level][current_tank_type]
+               and count != -1):
             if time == 0:
                 objects.append(EnemyTank(available_coordinates,
                                          objects, bullets,
                                          WIDTH, HEIGHT, current_tank_type))
                 count += 1
-                # устанавливаем интервал времени для следующего создания объекта
+                # устанавливаем интервал времени для следующего создания
                 time = 600
 
             break
@@ -177,7 +181,8 @@ while play:
         alive_tanks = sum(1 for obj in objects if isinstance(obj, Tank)
                           and obj.tank_player_live != 0)
         eagle_count = sum(1 for obj in objects if isinstance(obj, Eagle))
-        enemy_tank_count = sum(1 for obj in objects if isinstance(obj, EnemyTank))
+        enemy_tank_count = sum(1 for obj in objects
+                               if isinstance(obj, EnemyTank))
         if (alive_tanks == 0 or eagle_count <= 3
                 or (enemy_tank_count == 0 and count == -1)):
 
@@ -185,9 +190,14 @@ while play:
                 number_level += 1
                 if number_level == 4:
                     print('GAME OVER')
-                    menu.draw(window, 100, 100, 75)
-                    number_level = 0
+                    menu = Menu()
+                    menu.append_option('Начать играть', flag=0)
+                    menu.append_option('Выбор уровня',
+                                       lambda: menu.switch_option(1))
+                    menu.append_option('Выход')
+                    run_level_select = False
                     run_play = False
+                    number_level = 0
                 else:
                     bullets = []
                     objects = []
@@ -202,7 +212,8 @@ while play:
                     current_tank_type = '1'
 
                     tank = Tank(0, 380, 0,
-                                (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, pygame.K_SPACE),
+                                (pygame.K_a, pygame.K_d, pygame.K_w,
+                                 pygame.K_s, pygame.K_SPACE),
                                 tank_image_path, objects)
                     objects.append(tank)
 
@@ -210,9 +221,14 @@ while play:
                                   objects_durable_tiles, number_level)
             else:
                 print('GAME OVER')
-                menu.draw(window, 100, 100, 75)
+                menu = Menu()
+                menu.append_option('Начать играть', flag=0)
+                menu.append_option('Выбор уровня',
+                                   lambda: menu.switch_option(1))
+                menu.append_option('Выход')
                 run_level_select = False
                 run_play = False
+                number_level = 0
 
         for tile in objects:
             if isinstance(tile, Til):

@@ -36,9 +36,6 @@ class Menu:
 
             surface.blit(option, option_rect)
 
-    def quit_game(self):
-        pygame.quit()
-
     def level_select_window(self, window):
         run_level_select = True
         number_level = 1
@@ -67,7 +64,8 @@ class Menu:
                         number_level = max(0, number_level - 1)
                     elif event.key == pygame.K_DOWN:
                         self.switch_option(1)
-                        number_level = min(len(self.option_surfaces), number_level + 1)
+                        number_level = min(len(self.option_surfaces),
+                                           number_level + 1)
                     elif event.key == pygame.K_RETURN:
                         if number_level == 4:
                             number_level = -1

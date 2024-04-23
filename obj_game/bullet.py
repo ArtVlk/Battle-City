@@ -30,7 +30,8 @@ class Bullet:
             for obj in objects:
                 if (obj != self.parent
                         and obj.rect.colliderect(self.rect)):
-                    if self.parent.__class__.__name__ != obj.__class__.__name__:
+                    if (self.parent.__class__.__name__
+                            != obj.__class__.__name__):
                         obj.damage(self.damage, objects)
                     bullets.remove(self)
                     break

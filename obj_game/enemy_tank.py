@@ -63,7 +63,7 @@ class EnemyTank:
         self.tank_image = pygame.image.load(self.tank_info[0])
         self.tank_rotated = self.tank_image
 
-    # рандомный спавн танка противника
+    # случайное появление танка противника
     @staticmethod
     def generate_random_position(level, objects, bullets, width, height):
         random.shuffle(level)  # Перемешиваем список координат
@@ -98,11 +98,9 @@ class EnemyTank:
                              + coordinates_suitable_points[2][1]
                              + coordinates_suitable_points[3][1])//4
 
-                    valid_position = ((not any(obj.rect.colliderect(pygame.
-                                                                    Rect(x, y, TILE, TILE))
+                    valid_position = ((not any(obj.rect.colliderect(pygame.Rect(x, y, TILE, TILE))
                                                for obj in objects))
-                                      and (not any(bullet.rect.colliderect(pygame.
-                                                                           Rect(x, y, TILE, TILE))
+                                      and (not any(bullet.rect.colliderect(pygame.Rect(x, y, TILE, TILE))
                                                    for bullet in bullets)))
 
                     if valid_position:
@@ -166,11 +164,14 @@ class EnemyTank:
                         self.turn_flag = -1
 
                     break
-            else:  # Если препятствия больше нет
-                self.turn_flag = 0  # Сбрасываем флаг в 0
+
+            # Если препятствия больше нет
+            else:
+                # Сбрасываем флаг в 0
+                self.turn_flag = 0
 
         if self.turn_flag == 1:
-            # Проверяем упирание в правую границу окна
+            # Проверяем врезался ли в правую границу окна
             if self.rect.right >= self.width_window - self.current_moveSpeed:
                 self.turn_flag = -1
             elif self.direct == 1:
@@ -178,12 +179,13 @@ class EnemyTank:
             else:
                 # Обходим препятствие слева
                 self.rect.centerx -= self.current_moveSpeed
-                self.tank_rotated = pygame.transform.rotate(self.tank_image, 90)
+                self.tank_rotated = pygame.transform.rotate(self.tank_image,
+                                                            90)
                 self.direct_flag = 0
                 self.direct = 3
 
         elif self.turn_flag == -1:
-            # Проверяем упирание в левую границу окна
+            # Проверяем врезался ли в левую границу окна
             if self.rect.left - self.current_moveSpeed <= 0:
                 self.turn_flag = 1
             elif self.direct == 3:
@@ -191,7 +193,8 @@ class EnemyTank:
             else:
                 # Обходим препятствие справа
                 self.rect.centerx += self.current_moveSpeed
-                self.tank_rotated = pygame.transform.rotate(self.tank_image, 270)
+                self.tank_rotated = pygame.transform.rotate(self.tank_image,
+                                                            270)
                 self.direct_flag = 0
                 self.direct = 1
 
@@ -211,7 +214,8 @@ class EnemyTank:
 
         # Если стоим на месте, значит нужно обходить препятствие
         if (self.current_coordinates_x == self.rect.centerx
-                and self.current_coordinates_y == self.rect.centery and time >= 2000):
+                and self.current_coordinates_y == self.rect.centery
+                and time >= 2000):
             self.current_moveSpeed -= 1
 
             if self.current_moveSpeed <= 0:
@@ -259,8 +263,10 @@ class EnemyTank:
                 # вычисляем расстояние до танка
                 for obj in objects:
                     if isinstance(obj, Tank):
-                        distance = (abs(self.rect.centerx - obj.rect.centerx)
-                                    + abs(self.rect.centery - obj.rect.centery))
+                        distance = (abs(self.rect.centerx -
+                                        obj.rect.centerx)
+                                    + abs(self.rect.centery -
+                                          obj.rect.centery))
                         if distance < min_distance:
                             min_distance = distance
                             nearest_tank = obj
@@ -335,7 +341,8 @@ class EnemyTank:
             direction_x, direction_y = DIRECTS[direction]
             Bullet(self, self.rect.centerx, self.rect.centery,
                    direction_x * self.bulletSpeed,
-                   direction_y * self.bulletSpeed, self.bulletDamage, bullets)
+                   direction_y * self.bulletSpeed,
+                   self.bulletDamage, bullets)
             self.shotTimer = self.shotDelay
 
         if self.shotTimer > 0:
