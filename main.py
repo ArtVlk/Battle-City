@@ -23,8 +23,8 @@ FPS = 60
 # '1': 5 - обычного танка 5 раз
 LEVEL = {
     0: {
-        '1': 5,
-        '2': 1,
+        '1': 1,
+        '2': 0,
         '3': 0,
         '4': 0,
         '5': 0
@@ -186,10 +186,15 @@ while play:
         if (alive_tanks == 0 or eagle_count <= 3
                 or (enemy_tank_count == 0 and count == -1)):
 
-            if alive_tanks != 0 and not run_level_select:
+            if alive_tanks != 0 and not run_level_select and eagle_count == 4:
                 number_level += 1
                 if number_level == 4:
-                    print('GAME OVER')
+                    window.fill('black')
+                    font = pygame.font.SysFont('arial', 50)
+                    text_surface = font.render('Winner', True, (255, 255, 255))
+                    window.blit(text_surface, (200, 200))
+                    pygame.display.flip()
+                    pygame.time.delay(3000)
                     menu = Menu()
                     menu.append_option('Начать играть', flag=0)
                     menu.append_option('Выбор уровня',
@@ -210,6 +215,15 @@ while play:
                     count = 0
                     general_time = 0
                     current_tank_type = '1'
+                    window = pygame.display.set_mode((WIDTH, HEIGHT))
+                    window.fill('black')
+                    font = pygame.font.SysFont('arial', 50)
+
+                    text_surface = font.render('Уровень ' + str(number_level), True, (255, 255, 255))
+                    text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+                    window.blit(text_surface, text_rect)
+                    pygame.display.flip()
+                    pygame.time.delay(3000)
 
                     tank = Tank(0, 380, 0,
                                 (pygame.K_a, pygame.K_d, pygame.K_w,
@@ -220,7 +234,7 @@ while play:
                     level = Level(objects, available_coordinates,
                                   objects_durable_tiles, number_level)
             else:
-                print('GAME OVER')
+                print("GAME OVER")
                 menu = Menu()
                 menu.append_option('Начать играть', flag=0)
                 menu.append_option('Выбор уровня',

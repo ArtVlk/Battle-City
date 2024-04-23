@@ -18,7 +18,6 @@ class Til:
         window.blit(self.image, (self.rect.x, self.rect.y))
 
     def damage(self, value, objects):
-        print(self.tils[1])
         if self.tils[1] != 1 and self.tils[1] != 2:
             self.health -= value
             if self.health <= 0:
